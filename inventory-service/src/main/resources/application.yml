@@ -1,0 +1,71 @@
+spring:
+  application:
+    name: inventory-service
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/inventory_db}
+    username: ${DB_USERNAME:inventory_service}
+    password: ${DB_PASSWORD:inventory_service}
+    hikari:
+      connection-init-sql: SET lock_timeout = '5s'
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9094}
+    consumer:
+      group-id: inventory-service
+      auto-offset-reset: earliest
+    listener:
+      concurrency: 3
+      observation-enabled: true
+    template:
+      observation-enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          authorities-claim-name: roles
+          authority-prefix: ROLE_
+
+markflux:
+  jwt:
+    secret: ${JWT_SECRET:markflux-dev-secret-key-change-in-production}
+
+server:
+  port: 8082
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+  observations:
+    enable:
+      spring.security: false
+      tasks.scheduled: false
+  tracing:
+    sampling:
+      probability: 1.0
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: ${OTLP_TRACES_ENDPOINT:http://localhost:4318/v1/traces}
+  otlp:
+    metrics:
+      export:
+        enabled: false
+  logging:
+    export:
+      otlp:
+        enabled: false

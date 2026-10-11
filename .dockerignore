@@ -1,0 +1,7 @@
+**/target/
+.git/
+.idea/
+docs/
+monitoring/
+infrastructure/
+*.md
