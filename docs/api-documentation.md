@@ -2,6 +2,10 @@
 
 Swagger UI: http://localhost:8080/swagger-ui.html
 
+Postman: [MarkFlux.postman_collection.json](../postman/MarkFlux.postman_collection.json) dosyasını Postman'e import et.
+Önce **Auth** klasöründen token'ları al; token'lar ve oluşturulan kayıtların id'leri collection değişkenlerine
+otomatik yazılır.
+
 Tüm istekler gateway (`localhost:8080`) üzerinden yapılır. Yetki gereken isteklerde
 `Authorization: Bearer <token>` başlığı gönderilir.
 
